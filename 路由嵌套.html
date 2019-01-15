@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由嵌套</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #e2e2e2;
+        }
+
+        #app {
+            width: 650px;
+            margin: 30px auto;
+        }
+
+        h1 {
+            font-weight: lighter;
+        }
+
+        .title {
+            padding-bottom: 25px;
+            border-bottom: 2px solid whitesmoke;
+        }
+
+        #app>div {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .menu-title {
+            width: 25%;
+        }
+
+        .menu-title a {
+            display: inline-block;
+            width: 100%;
+            line-height: 40px;
+            margin-bottom: 3px;
+            padding-left: 25px;
+            background-color: whitesmoke;
+            text-decoration: none;
+            color: #575252;
+            border-radius: 4px;
+        }
+
+        .main {
+            width: 68%;
+            background-color: whitesmoke;
+            border-radius: 4px;
+
+        }
+        .main>div{
+            margin: 25px;
+        }
+        p{
+            line-height: 35px;
+        }
+        .content-title{
+            border-bottom: 2px solid #e2e2e2;
+        }
+        .content-title a{
+            padding: 5px 10px;
+            line-height: 45px;
+            text-decoration: none;
+        }
+        .content{
+            margin: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h1 class="title">嵌套路由</h1>
+        <div>
+            <div class="menu-title">
+                <router-link to="/home">首页</router-link><br>                
+                <router-link to="/about">About</router-link>
+            </div>
+            <router-view></router-view>
+        </div>
+    </div>
+    <script src="./vue.js"></script>
+    <script src="./vue-router.js"></script>
+    <script>
+        // 页面
+        var home = {
+            template: `<div class="main">
+                            <div>
+                                <h1>主页</h1>
+                                <p>这是主页内容</p>
+                                <div class="content-title">
+                                    <router-link to="/home/todaynews">今日要闻</router-link><router-link to="/home/sportsnews">体育新闻</router-link>
+                                </div>
+                                <router-view></router-view>  
+                            </div>                                                     
+                        </div>`
+        }
+        var about = {
+            template: `<div  class="main">
+                        <div>
+                            <h1>关于</h1>
+                            <p>这是关于页面</p>
+                        </div>
+                    </div>`
+        }
+        //创建对应的路由对象
+        const router = new VueRouter({
+            routes: [{
+                    path: '/',
+                    component: home
+                },
+                {
+                    path: '/home',
+                    component: home,
+                    children: [{
+                            path: 'todaynews', // 二级路由路径,不加/
+                            component: {
+                                template: `<ul class="content">
+                                            <li>要闻1</li>
+                                            <li>要闻2</li>
+                                            <li>要闻3</li>
+                                        </ul>`
+                            }
+                        },{
+                        path: 'sportsnews',
+                        component: {
+                            template: `<ul class="content">
+                                            <li>体育新闻1</li>
+                                            <li>体育新闻2</li>
+                                            <li>体育新闻3</li>
+                                            <li>体育新闻4</li>
+                                        </ul>`
+                        }}
+                    ]
+                },
+                {
+                    path: '/about',
+                    component: about
+                }
+            ]
+        })
+        // 使用路由对象 
+        new Vue({
+            el: "#app",
+            router,
+            // methods: {
+
+            // }
+        })
+    </script>
+</body>
+
+</html>
